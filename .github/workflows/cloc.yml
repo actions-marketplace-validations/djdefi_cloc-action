@@ -34,6 +34,15 @@ jobs:
         cat cloc.md
     
     # Test quoted exclusion patterns (the fix for issue #28)
+    - name: Generate test file for exclusion testing
+      run: |
+        echo "# This is a test file to validate quoted exclusion patterns work correctly" > pnpm-lock.yaml
+        echo "# It should be excluded when using --not-match-f=\"pnpm-lock\.yaml\"" >> pnpm-lock.yaml
+        echo "dependencies:" >> pnpm-lock.yaml
+        echo "  test: \"1.0.0\"" >> pnpm-lock.yaml
+        echo "  another: \"2.0.0\"" >> pnpm-lock.yaml
+        echo "  third: \"3.0.0\"" >> pnpm-lock.yaml
+    
     - name: Test quoted exclusion patterns
       uses: djdefi/cloc-action@main
       with:
