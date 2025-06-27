@@ -32,3 +32,39 @@ jobs:
     - name: Output report .md
       run: |
         cat cloc.md
+    
+    # Test quoted exclusion patterns (the fix for issue #28)
+    - name: Test quoted exclusion patterns
+      uses: djdefi/cloc-action@main
+      with:
+        options: --not-match-f="pnpm-lock\.yaml" --md --report-file=cloc-test-exclusion.md
+    
+    - name: Verify quoted pattern exclusion works
+      run: |
+        echo "=== Testing quoted exclusion pattern ==="
+        cat cloc-test-exclusion.md
+        # Check that pnpm-lock.yaml was excluded (should not appear in the report)
+        if grep -q "pnpm-lock.yaml" cloc-test-exclusion.md; then
+          echo "❌ FAIL: pnpm-lock.yaml was not excluded by quoted pattern"
+          exit 1
+        else
+          echo "✅ PASS: pnpm-lock.yaml was correctly excluded by quoted pattern"
+        fi
+    
+    # Test backward compatibility with unquoted patterns
+    - name: Test backward compatibility with unquoted patterns
+      uses: djdefi/cloc-action@main
+      with:
+        options: --exclude-lang=YAML --md --report-file=cloc-test-unquoted.md
+    
+    - name: Verify backward compatibility works
+      run: |
+        echo "=== Testing backward compatibility ==="
+        cat cloc-test-unquoted.md
+        # Check that YAML files were excluded (should not appear in language summary)
+        if grep -q "YAML" cloc-test-unquoted.md; then
+          echo "❌ FAIL: YAML files were not excluded by unquoted pattern"
+          exit 1
+        else
+          echo "✅ PASS: YAML files were correctly excluded by unquoted pattern"
+        fi

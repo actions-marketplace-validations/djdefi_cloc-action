@@ -1,0 +1,6 @@
+# This is a test file to validate quoted exclusion patterns work correctly
+# It should be excluded when using --not-match-f="pnpm-lock\.yaml"
+dependencies:
+  test: "1.0.0"
+  another: "2.0.0"
+  third: "3.0.0"
