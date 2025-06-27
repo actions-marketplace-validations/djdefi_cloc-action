@@ -1,0 +1,4 @@
+cloc.txt
+cloc.md
+*.tmp
+test-*.sh
